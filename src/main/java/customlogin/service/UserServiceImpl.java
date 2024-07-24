@@ -10,41 +10,40 @@ import customlogin.dto.UserDto;
 import customlogin.model.User;
 import customlogin.repositories.UserRepository;
 
-
 @Service
-public class UserServiceImpl  implements UserService{
-	
-	
-	@Autowired
-	PasswordEncoder passwordEncoder;
-	
-	private UserRepository userRepository;
-	
-	//private final UserRepository userRepository;
-    //private final PasswordEncoder passwordEncoder;
-	
-	
+public class UserServiceImpl implements UserService {
 
-	public UserServiceImpl(UserRepository userRepository) {
-		this.userRepository = userRepository;
-		//this.passwordEncoder = passwordEncoder;
-	}
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-	@Override
-	public User findByUsername(String username) {
-		
-		return userRepository.findByUsername(username);
-	}
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-	@Override
-	public User save(UserDto userDto) {
-		User user = new User(userDto.getFullname(), userDto.getDateofbirth(), userDto.getGender(), userDto.getAddress(), userDto.getCity(), userDto.getState(), userDto.getUsername(),passwordEncoder.encode(userDto.getPassword()));
-		return userRepository.save(user);
-	}
-	
-	@Override
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User save(UserDto userDto) {
+        User user = new User(
+            userDto.getFullname(),
+            userDto.getDateofbirth(),
+            userDto.getGender(),
+            userDto.getAddress(),
+            userDto.getCity(),
+            userDto.getState(),
+            userDto.getUsername(),
+            passwordEncoder.encode(userDto.getPassword())
+        );
+        return userRepository.save(user);
+    }
+
+    @Override
     public List<User> findAll() {
         return userRepository.findAll();
     }
-
 }
